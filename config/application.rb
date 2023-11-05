@@ -23,13 +23,21 @@ module SocialNetwork
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.time_zone = "UTC"
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.sequel.schema_dump = true
+    config.sequel.schema_format = :sql
+
+    config.sequel.after_connect = proc do
+      Sequel.default_timezone = :utc
+
+      ::DB = Sequel::Model.db unless Object.const_defined?(:DB)
+      Sequel::Model.plugin :timestamps, update_on_create: true, allow_manual_update: true
+    end
   end
 end

@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: highload_architect_development
+
+test:
+  <<: *default
+  database: highload_architect_test
+
+staging: *default
+
+production: *default
