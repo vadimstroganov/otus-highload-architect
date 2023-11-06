@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Инструкция по запуску
 
-Things you may want to cover:
+Собираем основной контейнер с приложением:
 
-* Ruby version
+```
+docker-compose build
+```
 
-* System dependencies
+Запускаем проект:
 
-* Configuration
+```
+docker-compose up
+```
 
-* Database creation
+Накатываем миграции в БД:
 
-* Database initialization
+```
+docker-compose run --rm app rails db:migrate
+```
 
-* How to run the test suite
+---
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[Postman коллекция](otus-highload-homework.postman_collection.json)
