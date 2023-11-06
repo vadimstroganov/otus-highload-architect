@@ -8,16 +8,22 @@
 docker-compose build
 ```
 
-Запускаем проект:
+Создаем БД:
 
 ```
-docker-compose up
+docker-compose run --rm app rails db:create
 ```
 
 Накатываем миграции в БД:
 
 ```
 docker-compose run --rm app rails db:migrate
+```
+
+Запускаем проект:
+
+```
+docker-compose up
 ```
 
 ---
