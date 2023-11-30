@@ -23,6 +23,13 @@ module Api
 
         render_success({ id: outcome.result })
       end
+
+      def search
+        outcome = User::SearchAction.run(unsafe_params)
+        return render_error(outcome.errors.details) unless outcome.valid?
+
+        render_success({ token: outcome.result })
+      end
     end
   end
 end

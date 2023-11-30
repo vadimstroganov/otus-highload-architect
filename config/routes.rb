@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: %i[create show] do
         post :login, on: :collection
+        get :search, on: :collection
       end
     end
   end
