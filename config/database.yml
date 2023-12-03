@@ -17,6 +17,6 @@ staging: *default
 
 production:
   <<: *default
-  database: <%= ENV["POSTGRES_DATABASE"] %>
-  username: <%= ENV["POSTGRES_USERNAME"] %>
+  database: "social-network"
+  username: "application"
   password: <%= ENV["POSTGRES_PASSWORD"] %>
