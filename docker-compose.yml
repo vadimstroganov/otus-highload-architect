@@ -3,6 +3,11 @@ services:
     depends_on:
       - 'postgres'
     build: .
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '256mb'
     ports:
       - '3000:3000'
     volumes:
@@ -13,6 +18,11 @@ services:
 
   postgres:
     image: "postgres:16"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '512mb'
     restart: always
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust

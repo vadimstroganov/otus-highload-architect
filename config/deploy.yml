@@ -1,0 +1,37 @@
+service: social-network
+
+image: vadimstroganov/social-network
+
+servers:
+  web:
+    - 80.87.110.246
+    - 185.41.161.7
+
+registry:
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    POSTGRES_HOST: 192.168.0.2
+    RAILS_ENV: production
+    RACK_ENV: production
+  secret:
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
+
+accessories:
+  db1:
+    image: postgres:16
+    host: 5.181.255.33
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: application
+        POSTGRES_DB: social-network
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data

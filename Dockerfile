@@ -31,6 +31,9 @@ RUN bundle install
 
 COPY . .
 
-EXPOSE 3000
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
+# Start the server by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD ["./bin/rails", "server"]
