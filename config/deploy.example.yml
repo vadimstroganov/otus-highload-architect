@@ -1,0 +1,22 @@
+service: service
+
+image: username/service
+
+servers:
+  web:
+    - 1.1.1.1
+
+registry:
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    POSTGRES_HOST: 192.168.0.1
+    RAILS_ENV: production
+    RACK_ENV: production
+  secret:
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD

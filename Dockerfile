@@ -25,7 +25,7 @@ RUN apt-get update -qq && \
       apt-get autoremove -y && \
       rm -rf /var/lib/apt/lists/*
 
-RUN gem update --system
+RUN gem install bundler:2.4.21
 
 COPY Gemfile Gemfile.lock ./
 
@@ -33,9 +33,13 @@ RUN bundle install
 
 COPY . .
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Run and own only the runtime files as a non-root user for security
+RUN useradd rails --create-home --shell /bin/bash && \
+    chown -R rails:rails db log storage tmp
+USER rails:rails
 
-# Start the server by default, this can be overwritten at runtime
+# Entrypoint prepares the database.
+ENTRYPOINT ["./bin/docker-entrypoint"]
+
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
