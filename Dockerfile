@@ -25,6 +25,8 @@ RUN apt-get update -qq && \
       apt-get autoremove -y && \
       rm -rf /var/lib/apt/lists/*
 
+RUN gem update --system
+
 COPY Gemfile Gemfile.lock ./
 
 RUN bundle install
