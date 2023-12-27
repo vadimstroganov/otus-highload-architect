@@ -32,11 +32,16 @@ module SocialNetwork
     config.sequel.schema_dump = true
     config.sequel.schema_format = :sql
 
+    if defined?(Rake.application)  && Rake.application.top_level_tasks.include?('sequel:create')
+      config.sequel.skip_connect = true
+    end
+
     config.sequel.after_connect = proc do
       Sequel.default_timezone = :utc
 
       ::DB = Sequel::Model.db unless Object.const_defined?(:DB)
       Sequel::Model.plugin :timestamps, update_on_create: true, allow_manual_update: true
+      Sequel::Model.plugin :insert_returning_select
     end
   end
 end

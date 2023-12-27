@@ -7,7 +7,17 @@ default: &default
 
 development:
   <<: *default
+  host: <%= ENV.fetch("POSTGRES_HOST_1") { "localhost" } %>
   database: highload_architect_development
+  servers:
+    replica1:
+      <<: *default
+      host: postgres2
+      database: highload_architect_development
+    replica2:
+      <<: *default
+      host: postgres2
+      database: highload_architect_development
 
 test:
   <<: *default

@@ -1,23 +1,15 @@
 # frozen_string_literal: true
 
-module User
-  class SearchAction < ApplicationAction
-    string :first_name
-    string :second_name
+class User::SearchAction < ApplicationAction
+  string :first_name
+  string :second_name
 
-    validates :first_name, :second_name, presence: true
+  validates :first_name, :second_name, presence: true
 
-    def execute
-      sql = <<~SQL.squish
-        SELECT
-          id, first_name, second_name, birthdate, biography, city
-        FROM
-          users
-        WHERE
-          first_name LIKE ? AND second_name LIKE ?
-      SQL
-
-      DB[sql, "%#{first_name}%", "%#{second_name}%"].all
-    end
+  def execute
+    User.where(Sequel.like(:first_name, "%#{first_name}%"))
+        .where(Sequel.like(:second_name, "%#{second_name}%"))
+        .server(:replica1)
+        .all
   end
 end

@@ -1,35 +1,64 @@
 services:
   app:
     depends_on:
-      - 'postgres'
+      - 'postgres1'
+      - 'postgres2'
+      - 'postgres3'
     build: .
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: '256mb'
     ports:
       - '3000:3000'
     volumes:
       - '.:/application'
       - '/application/tmp/cache'
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST_1=postgres1
+      - POSTGRES_HOST_2=postgres2
+      - POSTGRES_HOST_3=postgres3
 
-  postgres:
+  postgres1:
     image: "postgres:16"
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: '512mb'
+    container_name: postgres1
     restart: always
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=pass
     volumes:
-      - ./tmp/postgres_data:/var/lib/postgresql/data
+      - ./tmp/postgres_1_data:/var/lib/postgresql/data
+      - ./docker-configs/postgres1/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./docker-configs/postgres1/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+
+  postgres2:
+    image: "postgres:16"
+    depends_on:
+      - 'postgres1'
+    container_name: postgres2
+    restart: always
+    ports:
+      - 15432:5432
+    environment:
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - ./tmp/postgres_2_data:/var/lib/postgresql/data
+      - ./docker-configs/postgres2/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./docker-configs/postgres2/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+
+  postgres3:
+    image: "postgres:16"
+    depends_on:
+      - 'postgres1'
+    container_name: postgres3
+    restart: always
+    ports:
+      - 25432:5432
+    environment:
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - ./tmp/postgres_3_data:/var/lib/postgresql/data
+      - ./docker-configs/postgres3/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./docker-configs/postgres3/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
 
 volumes:
-  postgres:
+  postgres1:
+  postgres2:
+  postgres3:
