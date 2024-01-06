@@ -20,7 +20,7 @@ RUN apt-get update -qq && \
       echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
       > /etc/apt/sources.list.d/pgdg.list && \
       apt-get update && \
-      apt-get install --no-install-recommends -y libpq-dev postgresql-client-16 && \
+      apt-get install --no-install-recommends -y libpq-dev postgresql-client-16 redis-tools && \
       apt-get purge -y lsb-release && \
       apt-get autoremove -y && \
       rm -rf /var/lib/apt/lists/*

@@ -9,11 +9,31 @@ services:
       - '3000:3000'
     volumes:
       - '.:/application'
-      - '/application/tmp/cache'
+      - '/application/tmp'
     environment:
       - POSTGRES_HOST_1=postgres1
       - POSTGRES_HOST_2=postgres2
       - POSTGRES_HOST_3=postgres3
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+
+  sidekiq:
+    depends_on:
+      - 'postgres1'
+      - 'postgres2'
+      - 'postgres3'
+      - 'redis'
+    build: .
+    command: bundle exec sidekiq
+    volumes:
+      - '.:/application'
+      - '/application/tmp'
+    environment:
+      - POSTGRES_HOST_1=postgres1
+      - POSTGRES_HOST_2=postgres2
+      - POSTGRES_HOST_3=postgres3
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
 
   postgres1:
     image: "postgres:16"
@@ -58,7 +78,13 @@ services:
       - ./docker-configs/postgres3/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
       - ./docker-configs/postgres3/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
 
+  redis:
+    image: "redis:latest"
+    volumes:
+      - ./tmp/redis_data:/var/lib/redis/data
+
 volumes:
   postgres1:
   postgres2:
   postgres3:
+  redis:

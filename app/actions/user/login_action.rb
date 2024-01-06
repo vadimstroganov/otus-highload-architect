@@ -13,6 +13,7 @@ class User::LoginAction < ApplicationAction
     AccessToken.dataset
                .returning(:value, :expires_at)
                .insert(user_id: user[:id], value: access_token_value, expires_at: access_token_lifetime)
+               .first
   end
 
   private
